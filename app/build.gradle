@@ -3,6 +3,14 @@ plugins {
 }
 
 android {
+    signingConfigs {
+        release {
+            storeFile file('C:\\Users\\shail\\AndroidStudioProjects\\NUMAD21SuShailiGandhi\\key.jks')
+            storePassword 'rinukey6935#'
+            keyAlias 'rinu'
+            keyPassword 'rinukey6935#'
+        }
+    }
     compileSdkVersion 30
     buildToolsVersion "30.0.3"
 
@@ -14,6 +22,7 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        signingConfig signingConfigs.release
     }
 
     buildTypes {
