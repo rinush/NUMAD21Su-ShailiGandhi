@@ -7,9 +7,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
-public class MainActivity2<btnPressed> extends AppCompatActivity {
+public class Clicky<btnPressed> extends AppCompatActivity {
 
     private Button btnA;
     private Button btnB;
@@ -22,7 +21,7 @@ public class MainActivity2<btnPressed> extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main2);
+        setContentView(R.layout.activity_clicky);
 
         btnA = findViewById(R.id.btnA);
         btnB = findViewById(R.id.btnB);
