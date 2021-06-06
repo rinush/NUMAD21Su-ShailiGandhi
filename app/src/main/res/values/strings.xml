@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">NUMAD21Su-ShailiGandhi</string>
+    <string name="item_name">Item name</string>
+    <string name="item_description">Description</string>
+    <string name="description">This image acts as an icon.</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
