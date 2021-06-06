@@ -1,21 +1,17 @@
 package edu.neu.madcourse.numad21su_shailigandhi;
 
-import android.os.Parcel;
-import android.os.Parcelable;
 
-public class ItemCard implements ItemClickListener {
+public class ItemCard{
 
     private final int imageSource;
     private final String itemName;
-    private final String itemDesc;
-    private boolean isChecked;
+    private final String itemLink;
 
     //Constructor
-    public ItemCard(int imageSource, String itemName, String itemDesc,boolean isChecked) {
+    public ItemCard(int imageSource, String itemName, String itemLink) {
         this.imageSource = imageSource;
         this.itemName = itemName;
-        this.itemDesc = itemDesc;
-        this.isChecked = isChecked;
+        this.itemLink = itemLink;
     }
 
     //Getters for the imageSource, itemName and itemDesc
@@ -23,27 +19,12 @@ public class ItemCard implements ItemClickListener {
         return imageSource;
     }
 
-    public String getItemDesc() {
-        return itemDesc;
+    public String getItemLink() {
+        return itemLink;
     }
 
     public String getItemName() {
-        return itemName + (isChecked ? "(checked)" : "");
-    }
-
-    public boolean getStatus() {
-        return isChecked;
-    }
-
-
-    @Override
-    public void onItemClick(int position) {
-        isChecked = !isChecked;
-    }
-
-    @Override
-    public void onCheckBoxClick(int position) {
-        isChecked = !isChecked;
+        return itemName;
     }
 
 }

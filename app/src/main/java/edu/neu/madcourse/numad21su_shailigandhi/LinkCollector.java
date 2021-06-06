@@ -87,9 +87,7 @@ public class LinkCollector extends AppCompatActivity{
             // put itemName information into instance
             outState.putString(KEY_OF_INSTANCE + i + "1", itemList.get(i).getItemName());
             // put itemDesc information into instance
-            outState.putString(KEY_OF_INSTANCE + i + "2", itemList.get(i).getItemDesc());
-            // put isChecked information into instance
-            outState.putBoolean(KEY_OF_INSTANCE + i + "3", itemList.get(i).getStatus());
+            outState.putString(KEY_OF_INSTANCE + i + "2", itemList.get(i).getItemLink());
         }
         super.onSaveInstanceState(outState);
 
@@ -111,17 +109,11 @@ public class LinkCollector extends AppCompatActivity{
 
                 // Retrieve keys we stored in the instance
                 for (int i = 0; i < size; i++) {
-                    Integer imgId = savedInstanceState.getInt(KEY_OF_INSTANCE + i + "0");
+                    int imgId = savedInstanceState.getInt(KEY_OF_INSTANCE + i + "0");
                     String itemName = savedInstanceState.getString(KEY_OF_INSTANCE + i + "1");
-                    String itemDesc = savedInstanceState.getString(KEY_OF_INSTANCE + i + "2");
-                    boolean isChecked = savedInstanceState.getBoolean(KEY_OF_INSTANCE + i + "3");
+                    String itemLink = savedInstanceState.getString(KEY_OF_INSTANCE + i + "2");
 
-                    // We need to make sure names such as "XXX(checked)" will not duplicate
-                    // Use a tricky way to solve this problem, not the best though
-                    if (isChecked) {
-                        itemName = itemName.substring(0, itemName.lastIndexOf("("));
-                    }
-                    ItemCard itemCard = new ItemCard(imgId, itemName, itemDesc, isChecked);
+                    ItemCard itemCard = new ItemCard(imgId, itemName, itemLink);
 
                     itemList.add(itemCard);
                 }
@@ -183,19 +175,9 @@ public class LinkCollector extends AppCompatActivity{
             @Override
             public void onItemClick(int position) {
                 //attributions bond to the item has been changed
-                itemList.get(position).onItemClick(position);
-                rviewAdapter.notifyItemChanged(position);
-                Uri webLink = Uri.parse(itemList.get(position).getItemDesc());
+                Uri webLink = Uri.parse(itemList.get(position).getItemLink());
                 Intent intent = new Intent(Intent.ACTION_VIEW, webLink);
                 startActivity(intent);
-            }
-
-            @Override
-            public void onCheckBoxClick(int position) {
-                //attributions bond to the item has been changed
-                itemList.get(position).onCheckBoxClick(position);
-
-                rviewAdapter.notifyItemChanged(position);
             }
         };
         rviewAdapter.setOnItemClickListener(itemClickListener);
@@ -207,9 +189,8 @@ public class LinkCollector extends AppCompatActivity{
     }
 
     private void addItem(int position, String name, String url) {
-        itemList.add(position, new ItemCard(R.drawable.ic_launcher_background, name, url,false));
-        Toast.makeText(LinkCollector.this, "Add an item", Toast.LENGTH_SHORT).show();
-
+        itemList.add(position, new ItemCard(R.drawable.ic_launcher_background, name, url));
+        Snackbar.make(recyclerView, "Added New Item Name and URL", Snackbar.LENGTH_LONG).show();
         rviewAdapter.notifyItemInserted(position);
     }
 }
