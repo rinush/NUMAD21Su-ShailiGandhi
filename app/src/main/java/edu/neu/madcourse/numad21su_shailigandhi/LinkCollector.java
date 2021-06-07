@@ -3,7 +3,6 @@ package edu.neu.madcourse.numad21su_shailigandhi;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -14,7 +13,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.webkit.URLUtil;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -23,18 +21,18 @@ import java.util.ArrayList;
 
 public class LinkCollector extends AppCompatActivity{
 
-    private ArrayList<ItemCard> itemList = new ArrayList<>();
+    private ArrayList<ItemCard> itemCardArrayList = new ArrayList<>();
 
 
-    private RecyclerView recyclerView;
-    private RviewAdapter rviewAdapter;
-    private RecyclerView.LayoutManager rLayoutManger;
-    private FloatingActionButton addButton;
+    private RecyclerView rView;
+    private RviewAdapter rAdapter;
+    private RecyclerView.LayoutManager recyclerLayoutManager;
+    private FloatingActionButton addBtn;
     private EditText name;
     private EditText url;
 
-    private static final String KEY_OF_INSTANCE = "KEY_OF_INSTANCE";
-    private static final String NUMBER_OF_ITEMS = "NUMBER_OF_ITEMS";
+    private static final String keyInstances = "keyInstances";
+    private static final String numItems = "numItems";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,86 +41,69 @@ public class LinkCollector extends AppCompatActivity{
 
         init(savedInstanceState);
 
-        addButton = findViewById(R.id.addButton);
-        addButton.setOnClickListener(new View.OnClickListener() {
+        addBtn = findViewById(R.id.addButton);
+        addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int pos = 0;
-                openAlertDialogBox(v, pos);
+                openAlertDialogBox(v, itemCardArrayList.size());
             }
         });
 
-        //Specify what action a specific gesture performs, in this case swiping right or left deletes the entry
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
-            @Override
-            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
-                return false;
-            }
 
-            @Override
-            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-                Toast.makeText(LinkCollector.this, "Delete an item", Toast.LENGTH_SHORT).show();
-                int position = viewHolder.getLayoutPosition();
-                itemList.remove(position);
-
-                rviewAdapter.notifyItemRemoved(position);
-
-            }
-        });
-        itemTouchHelper.attachToRecyclerView(recyclerView);
     }
 
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
+        int size;
+        if(itemCardArrayList ==null){
+            size = 0;
+        }
+        else{
+            size = itemCardArrayList.size();
+        }
+        outState.putInt(numItems, size);
 
-
-        int size = itemList == null ? 0 : itemList.size();
-        outState.putInt(NUMBER_OF_ITEMS, size);
-
-        // Need to generate unique key for each item
-        // This is only a possible way to do, please find your own way to generate the key
         for (int i = 0; i < size; i++) {
-            // put image information id into instance
-            outState.putInt(KEY_OF_INSTANCE + i + "0", itemList.get(i).getImageSource());
-            // put itemName information into instance
-            outState.putString(KEY_OF_INSTANCE + i + "1", itemList.get(i).getItemName());
-            // put itemDesc information into instance
-            outState.putString(KEY_OF_INSTANCE + i + "2", itemList.get(i).getItemLink());
+            outState.putInt(keyInstances + i + "0", itemCardArrayList.get(i).getImageSource());
+            outState.putString(keyInstances + i + "1", itemCardArrayList.get(i).getItemName());
+            outState.putString(keyInstances + i + "2", itemCardArrayList.get(i).getItemLink());
         }
         super.onSaveInstanceState(outState);
-
     }
 
     private void init(Bundle savedInstanceState) {
 
-        initialItemData(savedInstanceState);
+        checkPrevItems(savedInstanceState);
         createRecyclerView();
     }
 
-    private void initialItemData(Bundle savedInstanceState) {
+    private void checkPrevItems(Bundle savedInstanceState) {
 
-        // Not the first time to open this Activity
-        if (savedInstanceState != null && savedInstanceState.containsKey(NUMBER_OF_ITEMS)) {
-            if (itemList == null || itemList.size() == 0) {
+        if (savedInstanceState != null && savedInstanceState.containsKey(numItems)) {
 
-                int size = savedInstanceState.getInt(NUMBER_OF_ITEMS);
-
-                // Retrieve keys we stored in the instance
-                for (int i = 0; i < size; i++) {
-                    int imgId = savedInstanceState.getInt(KEY_OF_INSTANCE + i + "0");
-                    String itemName = savedInstanceState.getString(KEY_OF_INSTANCE + i + "1");
-                    String itemLink = savedInstanceState.getString(KEY_OF_INSTANCE + i + "2");
-
-                    ItemCard itemCard = new ItemCard(imgId, itemName, itemLink);
-
-                    itemList.add(itemCard);
-                }
-            }
+            addPrevItem(savedInstanceState);
         }
 
     }
 
-    public void openAlertDialogBox(View view, int pos)
+    private void addPrevItem(Bundle savedInstanceState){
+        if (itemCardArrayList == null || itemCardArrayList.size() == 0) {
+
+            int size = savedInstanceState.getInt(numItems);
+
+            for (int i = 0; i < size; i++) {
+                int imgId = savedInstanceState.getInt(keyInstances + i + "0");
+                String itemName = savedInstanceState.getString(keyInstances + i + "1");
+                String itemLink = savedInstanceState.getString(keyInstances + i + "2");
+
+                ItemCard itemCard = new ItemCard(imgId, itemName, itemLink);
+
+                itemCardArrayList.add(itemCard);
+            }
+        }
+    }
+
+    private void openAlertDialogBox(View view, int pos)
     {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -135,9 +116,7 @@ public class LinkCollector extends AppCompatActivity{
                             @Override
                             public void onClick(DialogInterface dialog, int which)
                             {
-                                name = alertDialogBox
-                                        .findViewById(
-                                                R.id.name);
+                                name = alertDialogBox.findViewById(R.id.name);
                                 url = alertDialogBox.findViewById(R.id.url);
                                 createItem(pos, name.getText().toString(), url.getText().toString());
                             }
@@ -150,14 +129,14 @@ public class LinkCollector extends AppCompatActivity{
     private void createItem(int pos, String name, String url)
     {
         if (name.isEmpty() || url.isEmpty()) {
-            Snackbar.make(recyclerView, "Please fill all the details", Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(rView, "Please fill all the details", Snackbar.LENGTH_SHORT).show();
         }
         else {
             if (URLUtil.isValidUrl(url)){
                 addItem(pos, name, url);
             }
             else {
-                Snackbar.make(recyclerView, "Please enter valid URL", Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(rView, "Please enter valid URL", Snackbar.LENGTH_SHORT).show();
             }
         }
     }
@@ -165,32 +144,31 @@ public class LinkCollector extends AppCompatActivity{
     private void createRecyclerView() {
 
 
-        rLayoutManger = new LinearLayoutManager(this);
+        recyclerLayoutManager = new LinearLayoutManager(this);
 
-        recyclerView = findViewById(R.id.recycler_view);
-        recyclerView.setHasFixedSize(true);
+        rView = findViewById(R.id.recycler_view);
+        rView.setHasFixedSize(true);
 
-        rviewAdapter = new RviewAdapter(itemList);
+        rAdapter = new RviewAdapter(itemCardArrayList);
         ItemClickListener itemClickListener = new ItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                //attributions bond to the item has been changed
-                Uri webLink = Uri.parse(itemList.get(position).getItemLink());
+                Uri webLink = Uri.parse(itemCardArrayList.get(position).getItemLink());
                 Intent intent = new Intent(Intent.ACTION_VIEW, webLink);
                 startActivity(intent);
             }
         };
-        rviewAdapter.setOnItemClickListener(itemClickListener);
+        rAdapter.setOnItemClickListener(itemClickListener);
 
-        recyclerView.setAdapter(rviewAdapter);
-        recyclerView.setLayoutManager(rLayoutManger);
+        rView.setAdapter(rAdapter);
+        rView.setLayoutManager(recyclerLayoutManager);
 
 
     }
 
     private void addItem(int position, String name, String url) {
-        itemList.add(position, new ItemCard(R.drawable.ic_launcher_background, name, url));
-        Snackbar.make(recyclerView, "Added New Item Name and URL", Snackbar.LENGTH_LONG).show();
-        rviewAdapter.notifyItemInserted(position);
+        itemCardArrayList.add(position, new ItemCard(R.drawable.ic_launcher_background, name, url));
+        Snackbar.make(rView, "Added New Item Name and URL", Snackbar.LENGTH_LONG).show();
+        rAdapter.notifyItemInserted(position);
     }
 }
