@@ -106,13 +106,11 @@ public class LinkCollector extends AppCompatActivity{
     private void openAlertDialogBox(View view, int pos)
     {
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("New Application URL");
-
+        AlertDialog dialog;
         final View alertDialogBox = getLayoutInflater().inflate(R.layout.alert_dialog, null);
-        builder.setView(alertDialogBox);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        dialog = builder.setTitle("New Application URL").setView(alertDialogBox).setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which)
                             {
@@ -120,9 +118,7 @@ public class LinkCollector extends AppCompatActivity{
                                 url = alertDialogBox.findViewById(R.id.url);
                                 createItem(pos, name.getText().toString(), url.getText().toString());
                             }
-                        });
-
-        AlertDialog dialog = builder.create();
+                        }).create();
         dialog.show();
     }
 
