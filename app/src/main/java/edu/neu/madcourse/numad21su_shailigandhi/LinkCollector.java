@@ -106,11 +106,10 @@ public class LinkCollector extends AppCompatActivity{
     private void openAlertDialogBox(View view, int pos)
     {
 
-        AlertDialog dialog;
         final View alertDialogBox = getLayoutInflater().inflate(R.layout.alert_dialog, null);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-        dialog = builder.setTitle("New Application URL").setView(alertDialogBox).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        AlertDialog dialog = builder.setTitle("New Application URL").setView(alertDialogBox).setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which)
                             {
