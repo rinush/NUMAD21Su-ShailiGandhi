@@ -1,6 +1,5 @@
 package edu.neu.madcourse.numad21su_shailigandhi;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -21,25 +20,20 @@ import java.util.ArrayList;
 
 public class LinkCollector extends AppCompatActivity{
 
-    private ArrayList<ItemCard> itemCardArrayList = new ArrayList<>();
-
-
-    private RecyclerView rView;
     private RviewAdapter rAdapter;
+    private RecyclerView rView;
     private RecyclerView.LayoutManager recyclerLayoutManager;
     private FloatingActionButton addBtn;
+    private ArrayList<ItemCard> itemCardArrayList = new ArrayList<>();
     private EditText name;
     private EditText url;
-
-    private static final String keyInstances = "keyInstances";
-    private static final String numItems = "numItems";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_link_collector);
 
-        init(savedInstanceState);
+        createRecyclerView();
 
         addBtn = findViewById(R.id.addButton);
         addBtn.setOnClickListener(new View.OnClickListener() {
@@ -50,57 +44,6 @@ public class LinkCollector extends AppCompatActivity{
         });
 
 
-    }
-
-    @Override
-    protected void onSaveInstanceState(@NonNull Bundle outState) {
-        int size;
-        if(itemCardArrayList ==null){
-            size = 0;
-        }
-        else{
-            size = itemCardArrayList.size();
-        }
-        outState.putInt(numItems, size);
-
-        for (int i = 0; i < size; i++) {
-            outState.putInt(keyInstances + i + "0", itemCardArrayList.get(i).getImageSource());
-            outState.putString(keyInstances + i + "1", itemCardArrayList.get(i).getItemName());
-            outState.putString(keyInstances + i + "2", itemCardArrayList.get(i).getItemLink());
-        }
-        super.onSaveInstanceState(outState);
-    }
-
-    private void init(Bundle savedInstanceState) {
-
-        checkPrevItems(savedInstanceState);
-        createRecyclerView();
-    }
-
-    private void checkPrevItems(Bundle savedInstanceState) {
-
-        if (savedInstanceState != null && savedInstanceState.containsKey(numItems)) {
-
-            addPrevItem(savedInstanceState);
-        }
-
-    }
-
-    private void addPrevItem(Bundle savedInstanceState){
-        if (itemCardArrayList == null || itemCardArrayList.size() == 0) {
-
-            int size = savedInstanceState.getInt(numItems);
-
-            for (int i = 0; i < size; i++) {
-                int imgId = savedInstanceState.getInt(keyInstances + i + "0");
-                String itemName = savedInstanceState.getString(keyInstances + i + "1");
-                String itemLink = savedInstanceState.getString(keyInstances + i + "2");
-
-                ItemCard itemCard = new ItemCard(imgId, itemName, itemLink);
-
-                itemCardArrayList.add(itemCard);
-            }
-        }
     }
 
     private void openAlertDialogBox(View view, int pos)
@@ -137,7 +80,6 @@ public class LinkCollector extends AppCompatActivity{
     }
 
     private void createRecyclerView() {
-
 
         recyclerLayoutManager = new LinearLayoutManager(this);
 
