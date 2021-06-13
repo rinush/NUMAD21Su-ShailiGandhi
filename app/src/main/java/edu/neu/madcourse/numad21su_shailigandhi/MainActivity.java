@@ -17,6 +17,7 @@ public class MainActivity extends AppCompatActivity {
         Button btn = findViewById(R.id.button);
         Button start = findViewById(R.id.start);
         Button lclt = findViewById(R.id.lclt);
+        Button locator = findViewById(R.id.locator);
         TextView nameL = findViewById(R.id.nameL);
         TextView name = findViewById(R.id.name);
         TextView emailL = findViewById(R.id.emailL);
@@ -49,6 +50,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, LinkCollector.class);
+                startActivity(intent);
+            }
+        });
+
+        locator.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, Locator.class);
                 startActivity(intent);
             }
         });
