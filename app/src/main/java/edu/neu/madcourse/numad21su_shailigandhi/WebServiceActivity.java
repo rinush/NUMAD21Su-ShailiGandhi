@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,7 +30,7 @@ public class WebServiceActivity extends AppCompatActivity {
     private TextView feels_like;
     private TextView wind_speed;
     private TextView humidity;
-    private ImageView loadImage;
+    private ProgressBar loadData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,8 +40,8 @@ public class WebServiceActivity extends AppCompatActivity {
         city = (EditText)findViewById(R.id.city);
         zipcode = (EditText)findViewById(R.id.zipcode);
         submit = (Button)findViewById(R.id.submit);
-        loadImage = (ImageView) findViewById(R.id.loadImg);
-        loadImage.setVisibility(View.INVISIBLE);
+        loadData = (ProgressBar) findViewById(R.id.load);
+        loadData.setVisibility(View.INVISIBLE);
         temperature = (TextView)findViewById(R.id.temperature);
         feels_like = (TextView)findViewById(R.id.feels_like);
         wind_speed = (TextView)findViewById(R.id.wind_speed);
@@ -49,7 +50,7 @@ public class WebServiceActivity extends AppCompatActivity {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadImage.setVisibility(View.VISIBLE);
+                loadData.setVisibility(View.VISIBLE);
                 WebService webService = new WebService();
 
                 String url = "";
@@ -75,7 +76,7 @@ public class WebServiceActivity extends AppCompatActivity {
 
         @Override
         protected void onProgressUpdate(Integer... values) {
-            loadImage.setVisibility(View.VISIBLE);
+            loadData.setVisibility(View.VISIBLE);
         }
 
         @Override
@@ -118,7 +119,7 @@ public class WebServiceActivity extends AppCompatActivity {
                     Toast.makeText(WebServiceActivity.this, "Something Went Wrong", Toast.LENGTH_LONG).show();
                 }
 
-            loadImage.setVisibility(View.INVISIBLE);
+            loadData.setVisibility(View.INVISIBLE);
         }
     }
 
