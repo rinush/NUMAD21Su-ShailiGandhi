@@ -15,11 +15,13 @@ import java.net.URL;
 public final class NetworkUtil {
 
     public static String checkValid(String url) {
-        if (URLUtil.isValidUrl(url) || Patterns.WEB_URL.matcher(url).matches()) {
+        if (URLUtil.isValidUrl(url)) {
             if(!(url.startsWith("http://") || url.startsWith("https://"))){
                 return "https://" + url;
             }
-            return url;
+            else {
+                return url;
+            }
         }
         return "Invalid Input";
     }
@@ -29,8 +31,14 @@ public final class NetworkUtil {
         BufferedReader buffReader=new BufferedReader(new InputStreamReader(inpStream));
         String line;
         try {
-            while((line=buffReader.readLine())!=null){
-                strBuild.append(line);
+            while(true){
+                line=buffReader.readLine();
+                if (line == null) {
+                    break;
+                }
+                else {
+                    strBuild.append(line);
+                }
             }
             buffReader.close();
             return strBuild.toString().replace(",", ",\n");

@@ -89,9 +89,8 @@ public class WebServiceActivity extends AppCompatActivity {
                 if (response.equals("No Result")) {
                     throw new IOException("No Result");
                 }
-                jsonObject = new JSONObject(response);
 
-                return jsonObject;
+                return new JSONObject(response);
 
             } catch (IOException | JSONException e) {
                 e.printStackTrace();
