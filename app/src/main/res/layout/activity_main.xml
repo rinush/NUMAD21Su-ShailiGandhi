@@ -110,5 +110,17 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.153" />
 
+    <Button
+        android:id="@+id/webService"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="WebService"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.551"
+        app:layout_constraintStart_toEndOf="@+id/locator"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.152" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
